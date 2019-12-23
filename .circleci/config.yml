@@ -18,7 +18,7 @@ commands:
     steps:
       - run: aws --profile vdo-rpcv-<< parameters.stage >> s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws --profile vdo-rpcv-<< parameters.stage >> s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
 jobs:
-  build_app_dev:
+  build_dev:
     executor: aws-serverless/default
     steps:
       - checkout
@@ -30,7 +30,7 @@ jobs:
           root: ~/.aws-sam
           paths:
             - build
-  deploy_app_dev:
+  deploy_dev:
     executor: aws-serverless/default
     steps:
       - attach_workspace:
@@ -38,7 +38,7 @@ jobs:
       - aws-serverless/deploy:
           profile-name: vdo-rpcv-dev
           stack-name: vdo-rpcv-dev
-  aws_auth_dev:
+  auth_dev:
     executor: aws-serverless/default
     working_directory: ~/vdo-rpcv
     environment:
@@ -58,10 +58,10 @@ jobs:
 workflows:
   release:
     jobs:
-      - aws_auth
-      - build_app_dev:
+      - auth_dev
+      - build_dev:
           requires:
             - aws_auth
-      - deploy_app_dev:
+      - deploy_dev:
           requires:
             - build_app_dev
