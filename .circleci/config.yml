@@ -47,5 +47,8 @@ workflows:
           name: Deploy rpcv api
           stack-name: rpcv-api-dev
           template: ./template.yml
+          aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
+          aws-region: AWS_REGION_DEV
           requires:
             - aws_auth
