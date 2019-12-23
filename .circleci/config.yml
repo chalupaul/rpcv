@@ -11,13 +11,11 @@ orbs:
 commands:
   prep-s3:
     description: "Ensures s3 buckets exist"
-    environment:
-      AWS_REGION: us-west-2
     parameters:
       stage:
         type: string
     steps:
-      - run: aws s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region "$AWS_REGION"
+      - run: aws s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
 jobs:
   aws_auth:
     executor: aws-cli/default
