@@ -36,14 +36,22 @@ jobs:
           root: ~/.aws
           paths:
             - "*"
-workflows:
-  release:
-    jobs:
+  deploy_dev:
+    <<: *DEPLOY_JOB_DEFAULTS
+    working_directory: ~/vdo-rpcv
+    steps:
       - checkout
-      - aws_auth
+      - attach_workspace:
+          at: ~/.aws
       - aws-serverless/deploy:
           profile-name: vdo-rpcv-dev
           s3-bucket: vdo-rpcv-dev
           name: Deploy rpcv api
           stack-name: rpcv-api-dev
           template: ./template.yml
+
+workflows:
+  release:
+    jobs:
+      - aws_auth
+      - deploy_dev
