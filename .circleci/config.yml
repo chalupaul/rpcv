@@ -8,6 +8,7 @@ DEPLOY_JOB_DEFAULTS: &DEPLOY_JOB_DEFAULTS
   working_directory: ~/vdo-rpcv
 orbs:
   aws-cli: circleci/aws-cli@0.1.13
+  aws-serverless: circleci/aws-serverless@1.0.2
 commands:
   prep-s3:
     description: "Ensures s3 buckets exist"
@@ -23,7 +24,6 @@ jobs:
     environment:
       AWS_REGION: us-west-2
     steps:
-      - checkout
       - aws-cli/install
       - aws-cli/configure:
           profile-name: vdo-rpcv-dev
@@ -39,4 +39,11 @@ jobs:
 workflows:
   release:
     jobs:
+      - checkout
       - aws_auth
+      - aws-serverless/deploy:
+          profile-name: vdo-rpcv-dev
+          s3-bucket: vdo-rpcv-dev
+          name: Deploy rpcv api
+          stack-name: rpcv-api-dev
+          template: ./template.yml
