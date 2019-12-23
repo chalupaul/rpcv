@@ -1,0 +1,47 @@
+version: 2.1
+
+DEPLOY_JOB_DEFAULTS: &DEPLOY_JOB_DEFAULTS
+  docker:
+    - image: ryandub/xplat-ci-images:latest
+  environment:
+    AWS_PROFILE: vdo-rpcv-dev
+  working_directory: ~/vdo-rpcv
+orbs:
+  aws-cli: circleci/aws-cli@0.1.13
+commands:
+  prep-s3:
+    description: "Ensures s3 buckets exist"
+  environment:
+    AWS_REGION: us-west-2
+  parameters:
+    stage:
+      type: string
+  steps:
+    - run: aws s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region "$AWS_REGION"
+jobs:
+  aws_auth:
+    executor: aws-cli/default
+    working_directory: ~/vdo-rpcv
+    environment:
+      AWS_REGION: us-west-2
+    steps:
+      - checkout
+      - aws-cli/install
+      - aws-cli/configure:
+        profile-name: vdo-rpcv-dev
+        aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
+        aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
+        aws-region: AWS_REGION
+      - prep-s3:
+          stage: dev
+      - aws-cli/configure:
+          profile-name: vdo-rpcv-prod
+          aws-access-key-id: AWS_ACCESS_KEY_ID_PROD
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_PROD
+          aws-region: AWS_REGION
+      - persist_to_workspace:
+          root: ~/.aws
+          paths:
+            - "*"
+      - prep-s3:
+          stage: prod
