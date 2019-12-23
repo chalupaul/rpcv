@@ -24,7 +24,6 @@ jobs:
       - checkout
       - aws-serverless/build:
           profile-name: vdo-rpcv-dev
-          aws-region: AWS_REGION_DEV
           s3-bucket: vdo-rpcv-dev
           template: ./template.yaml
       - persist_to_workspace:
@@ -39,20 +38,17 @@ jobs:
       - aws-serverless/deploy:
           profile-name: vdo-rpcv-dev
           stack-name: vdo-rpcv-dev
-          aws-region: AWS_REGION_DEV
-  aws_auth:
-    executor: aws-cli/default
+  aws_auth_dev:
+    executor: aws-serverless/default
     working_directory: ~/vdo-rpcv
     environment:
       AWS_REGION: us-west-2
     steps:
-      - checkout
-      - aws-cli/install
-      - aws-cli/configure:
-          profile-name: vdo-rpcv-dev
+      - aws-serverless/install:
           aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
-          aws-region: AWS_REGION
+          aws-region: AWS_REGION_DEV
+          profile-name: vdo-rpcv-dev
       - prep-s3:
           stage: dev
       - persist_to_workspace:
