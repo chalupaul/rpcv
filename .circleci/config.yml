@@ -24,6 +24,7 @@ jobs:
     environment:
       AWS_REGION: us-west-2
     steps:
+      - checkout
       - aws-cli/install
       - aws-cli/configure:
           profile-name: vdo-rpcv-dev
@@ -46,3 +47,5 @@ workflows:
           name: Deploy rpcv api
           stack-name: rpcv-api-dev
           template: ./template.yml
+          requires:
+            - aws_auth
