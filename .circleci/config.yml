@@ -32,13 +32,6 @@ jobs:
           aws-region: AWS_REGION
       - prep-s3:
           stage: dev
-      - aws-cli/configure:
-          profile-name: vdo-rpcv-prod
-          aws-access-key-id: AWS_ACCESS_KEY_ID_PROD
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_PROD
-          aws-region: AWS_REGION
-      - prep-s3:
-          stage: prod
       - persist_to_workspace:
           root: ~/.aws
           paths:
