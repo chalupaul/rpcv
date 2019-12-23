@@ -11,13 +11,13 @@ orbs:
 commands:
   prep-s3:
     description: "Ensures s3 buckets exist"
-  environment:
-    AWS_REGION: us-west-2
-  parameters:
-    stage:
-      type: string
-  steps:
-    - run: aws s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region "$AWS_REGION"
+    environment:
+      AWS_REGION: us-west-2
+    parameters:
+      stage:
+        type: string
+    steps:
+      - run: aws s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region "$AWS_REGION"
 jobs:
   aws_auth:
     executor: aws-cli/default
@@ -28,10 +28,10 @@ jobs:
       - checkout
       - aws-cli/install
       - aws-cli/configure:
-        profile-name: vdo-rpcv-dev
-        aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
-        aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
-        aws-region: AWS_REGION
+          profile-name: vdo-rpcv-dev
+          aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
+          aws-region: AWS_REGION
       - prep-s3:
           stage: dev
       - aws-cli/configure:
