@@ -15,7 +15,7 @@ commands:
       stage:
         type: string
     steps:
-      - run: aws s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
+      - run: aws --profile vdo-rpcv-<< parameters.stage >> s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws --profile vdo-rpcv-<< parameters.stage >> s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
 jobs:
   aws_auth:
     executor: aws-cli/default
