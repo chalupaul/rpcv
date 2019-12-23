@@ -61,7 +61,7 @@ workflows:
       - auth_dev
       - build_dev:
           requires:
-            - aws_auth
+            - auth_dev
       - deploy_dev:
           requires:
-            - build_app_dev
+            - build_dev
