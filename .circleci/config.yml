@@ -32,8 +32,6 @@ jobs:
           template: ./template.yaml
       - aws-serverless/install:
           profile-name: vdo-rpcv-dev
-          stack-name: vdo-rpcv-dev
-          template: ./template.yaml
 workflows:
   release:
     jobs:
