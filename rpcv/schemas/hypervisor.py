@@ -21,11 +21,11 @@ def validate_ip(ip: str) -> None:
 
 
 class CreateHypervisorSchema(RequestSchema):
-    cluster_id = fields.UUID(required=True)
+    cluster_uuid = fields.UUID(required=True)
 
 
 class HypervisorSchema(Schema):
-    id = fields.UUID()
-    cluster_id = fields.UUID()
+    uuid = fields.UUID()
+    cluster_uuid = fields.UUID()
     status = EnumField(ClusterStatus)
     ip_address = fields.String(validate=validate_ip)

@@ -16,7 +16,7 @@ class CreateClusterSchema(RequestSchema):
 
 
 class ClusterSchema(Schema):
-    id = fields.UUID()
+    uuid = fields.UUID()
     status = EnumField(ClusterStatus)
     hypervisors = fields.List(fields.UUID())
     created_at = fields.DateTime()

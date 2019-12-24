@@ -17,24 +17,24 @@ def create_hypervisor():
 
 
 @registry.handles(
-    rule="/hypervisors/<uuid:hypervisor_id>",
+    rule="/hypervisors/<uuid:hypervisor_uuid>",
     method="GET",
     query_string_schema=CreateHypervisorSchema(),
 )
-def get_hypervisor(hypervisor_id: UUID):
+def get_hypervisor(hypervisor_uuid: UUID):
     hypervisor = HypervisorSchema()
     if hypervisor is None:
         raise errors.NotFound()
 
-    return hypervisor.id
+    return hypervisor.uuid
 
 
 @registry.handles(
-    rule="/hypervisors/<uuid:hypervisor_id>",
+    rule="/hypervisors/<uuid:hypervisor_uuid>",
     method="PATCH",
     request_body_schema=CreateHypervisorSchema(),
 )
-def update_hypervisor(hypervisor_id: UUID):
+def update_hypervisor(hypervisor_uuid: UUID):
     body = flask_rebar.get_validated_body()
 
     hypervisor = body
@@ -44,8 +44,8 @@ def update_hypervisor(hypervisor_id: UUID):
     return "", 204
 
 
-@registry.handles(rule="/hypervisors/<uuid:cluster_id>", method="DELETE")
-def delete_hypervisor(account_id: UUID):
+@registry.handles(rule="/hypervisors/<uuid:cluster_uuid>", method="DELETE")
+def delete_hypervisor(account_uuid: UUID):
     hypervisor = {}
     if hypervisor is None:
         raise errors.NotFound()

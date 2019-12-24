@@ -13,7 +13,7 @@ from rpcv.schemas.cluster import ClusterSchema, CreateClusterSchema, ClusterStat
 def create_cluster():
     body = flask_rebar.get_validated_body()
     sample_data = {
-        "id": body.id,
+        "uuid": body.uuid,
         "status": "CREATING",
         "hypervisors": [],
     }
@@ -23,13 +23,13 @@ def create_cluster():
 
 
 @registry.handles(
-    rule="/clusters/<uuid:cluster_id>",
+    rule="/clusters/<uuid:cluster_uuid>",
     method="GET",
     query_string_schema=CreateClusterSchema(),
 )
-def get_cluster(cluster_id: UUID):
+def get_cluster(cluster_uuid: UUID):
     sample_data = {
-        "id": cluster_id,
+        "uuid": cluster_uuid,
         "status": getattr(ClusterStatus, "CREATING"),
         "hypervisors": [],
     }
@@ -42,11 +42,11 @@ def get_cluster(cluster_id: UUID):
 
 
 @registry.handles(
-    rule="/clusters/<uuid:cluster_id>",
+    rule="/clusters/<uuid:cluster_uuid>",
     method="PATCH",
     request_body_schema=CreateClusterSchema(),
 )
-def update_cluster(cluster_id: UUID):
+def update_cluster(cluster_uuid: UUID):
     body = flask_rebar.get_validated_body()
 
     cluster = body
@@ -56,8 +56,8 @@ def update_cluster(cluster_id: UUID):
     return "", 204
 
 
-@registry.handles(rule="/clusters/<uuid:cluster_id>", method="DELETE")
-def delete_cluster(cluster_id: UUID):
+@registry.handles(rule="/clusters/<uuid:cluster_uuid>", method="DELETE")
+def delete_cluster(cluster_uuid: UUID):
     cluster = {}
     if cluster is None:
         raise errors.NotFound()
