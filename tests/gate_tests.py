@@ -7,13 +7,30 @@ test_dir = os.path.join(app_dir, "tests")
 
 
 def task_flake8():
-    return {"actions": [f"poetry run flake8 {code_dir} {test_dir}"]}
+    # line length of 88 to match black
+    return {
+        "actions": [
+            (
+                "poetry run flake8"
+                " --max-line-length=88"
+                " --count"
+                " --statistics"
+                f" {code_dir} {test_dir}"
+            )
+        ]
+    }
 
 
 def task_mypy():
     return {
         "actions": [
-            f"poetry run mypy --strict --ignore-missing-imports --allow-subclassing-any {code_dir}"
+            (
+                "poetry run mypy"
+                " --strict "
+                " --ignore-missing-imports"
+                " --allow-subclassing-any"
+                f" {code_dir}"
+            )
         ]
     }
 

@@ -41,6 +41,10 @@ commands:
           name: Run gate tests
           command: |
             poetry run doit -n 4 -f ./tests/gate_tests.py
+      - run:
+          name: Run unit tests
+          command: |
+            poetry run pytest --cov=rpcv ./tests
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
