@@ -20,7 +20,7 @@ jobs:
   dev:
     docker:
       - image: ryandub/xplat-ci-images:latest
-    working_directory: ~/vdo-rpcv
+    working_directory: ~/rpcv
     steps:
       - checkout
       - aws-serverless/install:
@@ -32,7 +32,7 @@ jobs:
           aws-region: AWS_REGION_DEV
           profile-name: vdo-rpcv-dev
           s3-bucket: vdo-rpcv-dev
-          template: ./template.yaml
+          template: ~/rpcv/template.yaml
       - aws-serverless/install:
           aws-region: AWS_REGION_DEV
           profile-name: vdo-rpcv-devg
