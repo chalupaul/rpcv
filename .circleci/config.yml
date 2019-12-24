@@ -73,7 +73,7 @@ commands:
       - run:
           name: Deploy app
           command: |
-            sam deploy 
+            sam deploy \
             --stack-name rpcv-api-<< parameters.stage >> \
             --s3-prefix << parameters.stage >> \
             --s3-bucket vdo-rpcv-<< parameters.stage >> \
