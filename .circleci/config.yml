@@ -24,11 +24,9 @@ commands:
       stage:
         type: string
     steps:
+      - attach_workspace:
+          at: ~/.aws
       - checkout
-      - run:
-          name: Build "rpc-v api"
-          command: |
-            pip install aws-sam-cli awscli poetry
       - run:
           name: Build sam app
           command: |
