@@ -30,6 +30,7 @@ commands:
       - run:
           name: Build sam app
           command: |
+            ls ~;
             sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ./rpcv/template.yaml
 jobs:
   dev_build_prep:
