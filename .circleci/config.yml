@@ -25,12 +25,22 @@ commands:
       - run:
           name: install poetry deps
           command: |
-            ls -la ~/project;
             poetry install
       - save_cache:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
             - /root/.cache/pypoetry/virtualenvs
+  unit-test:
+    description: All the tests!
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+      - run:
+          name: Run gate tests
+          command: |
+            poetry run tox
   build:
     description: Build app for stage << parameters.stage >>
     parameters:
@@ -45,6 +55,11 @@ commands:
           command: |
             sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ./template.yaml
 jobs:
+  unit_tests:
+    docker:
+      - image: chalupaul/sambuild:latest
+    steps:
+      - unit-test
   dev_build_prep:
     docker:
       - image: chalupaul/sambuild:latest
@@ -62,5 +77,8 @@ workflows:
     jobs:
       - dev_build_prep
       - dev_build:
+          requires:
+            - dev_build_prep
+      - unit_tests:
           requires:
             - dev_build_prep
