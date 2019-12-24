@@ -17,37 +17,17 @@ commands:
         type: string
     steps:
       - run: aws --profile vdo-rpcv-<< parameters.stage >> s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws --profile vdo-rpcv-<< parameters.stage >> s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
-jobs:
-  dev:
-    executor: aws-serverless/default
-    steps:
-      - attach_workspace:
-          at: ~/.aws
-      - checkout
-      - aws-serverless/deploy:
-          profile-name: vdo-rpcv-dev
-          s3-bucket: vdo-rpcv-dev
-          template: ./template.yaml
-          stack-name: rpcv-api
-  auth_dev:
-    executor: aws-serverless/default
-    working_directory: ~/vdo-rpcv
-    steps:
-      - aws-serverless/install:
-          aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
-          aws-region: AWS_REGION_DEV
-          profile-name: vdo-rpcv-dev
-      - prep-s3:
-          stage: dev
-      - persist_to_workspace:
-          root: ~/.aws
-          paths:
-            - "*"
 workflows:
   release:
     jobs:
       - auth_dev
-      - dev:
-          requires:
-            - auth_dev
+      - checkout
+      - aws-serverless/deploy:
+          name: deploy-dev
+          aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
+          aws-region: AWS_REGION_DEV
+          profile-name: vdo-rpcv-dev
+          s3-bucket: vdo-rpcv-dev
+          template: ./template.yaml
+          stack-name: rpcv-api
