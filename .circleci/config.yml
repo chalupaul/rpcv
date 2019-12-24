@@ -30,7 +30,7 @@ commands:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
             - ~/.cache/pypoetry/virtualenvs
-  gate-test:
+  gate_test:
     description: All the tests!
     steps:
       - checkout
@@ -87,7 +87,7 @@ jobs:
     docker:
       - image: chalupaul/sambuild:latest
     steps:
-      - unit-test
+      - gate_test
   dev_build_prep:
     docker:
       - image: chalupaul/sambuild:latest
@@ -106,7 +106,6 @@ jobs:
     steps:
       - sam_deploy:
           stage: dev
-
 workflows:
   release:
     jobs:
