@@ -6,6 +6,6 @@ stack_name = "rpcv-api"
 s3_bucket = "rpcv-api"
 s3_prefix = "rpcv-api"
 region = "us-west-2"
-confirm_changeset = true
+confirm_changeset = false
 capabilities = "CAPABILITY_IAM"
 parameter_overrides = "Stage=dev"
