@@ -18,8 +18,24 @@ commands:
           root: ~/.aws
           paths:
             - "*"
+  unit_test:
+    description: All the tests
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+      - run:
+          name: setup tests
+          command: |
+            ls -la ~;
+            poetry install
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          paths:
+            - /root/.cache/pypoetry/virtualenvs
   build:
-    description: "Build app for stage: << parameters.stage >>"
+    description: Build app for stage << parameters.stage >>
     parameters:
       stage:
         type: string
@@ -30,8 +46,7 @@ commands:
       - run:
           name: Build sam app
           command: |
-            ls .;
-            sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ~/project/template.yaml
+            sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ./template.yaml
 jobs:
   dev_build_prep:
     docker:
