@@ -24,7 +24,7 @@ commands:
       - run:
           name: install poetry deps
           command: |
-            ls -la ~;
+            ls -la ~/project;
             poetry install
       - save_cache:
           key: deps-{{ checksum "project/poetry.lock" }}
