@@ -30,7 +30,7 @@ commands:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
             - ~/.cache/pypoetry/virtualenvs
-  unit-test:
+  gate-test:
     description: All the tests!
     steps:
       - checkout
@@ -61,6 +61,27 @@ commands:
           name: Build sam app
           command: |
             sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ./template.yaml
+  deploy:
+    description: Deploy rpcv- for stage << parameters.stage >>
+    parameters:
+      stage:
+        type: string
+    steps:
+      - attach_workspace:
+          at: ~/.aws
+      - checkout
+      - run:
+          name: Deploy app
+          command: |
+            sam deploy 
+            --stack-name rpcv-do-<< parameters.stage >> \
+            --s3-prefix << parameters.stage >> \
+            --s3-bucket vdo-rpcv-<< parameters.stage >> \
+            --profile vdo-rpcv-<< parameters.stage >> \
+            -- region ${AWS_DEFAULT_REGION} \
+            --capabilities [CAPABILITY_IAM,CAPABILITY_NAMED_IAM] \
+            --parameter-overrides Stage=<< parameters.stage >> \
+            -t ./template.yaml
 jobs:
   unit_tests:
     docker:
@@ -86,6 +107,10 @@ workflows:
       - dev_build:
           requires:
             - dev_build_prep
-      - unit_tests:
+      - gate_tests:
           requires:
             - dev_build_prep
+      - dev_deploy:
+          requires:
+            - gate_tests
+            - dev_build
