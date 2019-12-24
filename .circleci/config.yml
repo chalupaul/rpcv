@@ -55,11 +55,21 @@ commands:
           at: ~/.aws
       - checkout
       - run:
+          name: Validate sam app
+          command: |
+            sam validate \
+            --profile "vdo-rpcv-<< parameters.stage >>" \
+            --region ${AWS_DEFAULT_REGION}
+            --template ./template.yaml
+      - run:
           name: Build sam app
           command: |
-            sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ./template.yaml
+            sam build \
+            --profile vdo-rpcv-<< parameters.stage >> \
+            --region ${AWS_DEFAULT_REGION} \
+            --template ./template.yaml
   sam_deploy:
-    description: Deploy rpcv- for stage << parameters.stage >>
+    description: Deploy rpcv for stage << parameters.stage >>
     parameters:
       stage:
         type: string
@@ -78,6 +88,7 @@ commands:
             --region ${AWS_DEFAULT_REGION} \
             --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_IAM \
             --parameter-overrides Stage=<< parameters.stage >> \
+            --no-fail-on-empty-changeset \
             --template ./template.yaml
 jobs:
   gate_tests:
