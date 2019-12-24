@@ -37,6 +37,8 @@ commands:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
+      - restore_cache:
+          keys:
             - tox-{{ checksum "tox.ini" }}
       - run:
           name: Run gate tests
