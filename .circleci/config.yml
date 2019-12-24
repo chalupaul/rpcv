@@ -20,14 +20,14 @@ commands:
             - "*"
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-{{ checksum "project/poetry.lock" }}
       - run:
           name: install poetry deps
           command: |
             ls -la ~;
             poetry install
       - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
+          key: deps-{{ checksum "project/poetry.lock" }}
           paths:
             - /root/.cache/pypoetry/virtualenvs
   build:
