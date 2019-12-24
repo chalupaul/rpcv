@@ -79,7 +79,7 @@ commands:
             --s3-bucket vdo-rpcv-<< parameters.stage >> \
             --profile vdo-rpcv-<< parameters.stage >> \
             --region ${AWS_DEFAULT_REGION} \
-            --capabilities CAPABILITY_AUTO_EXPAND,CAPABILITY_NAMED_IAM,CAPABILITY_IAM \
+            --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM CAPABILITY_IAM \
             --parameter-overrides Stage=<< parameters.stage >> \
             -t ./template.yaml
 jobs:
