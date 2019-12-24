@@ -74,11 +74,11 @@ commands:
           name: Deploy app
           command: |
             sam deploy 
-            --stack-name rpcv-do-<< parameters.stage >> \
+            --stack-name rpcv-api-<< parameters.stage >> \
             --s3-prefix << parameters.stage >> \
             --s3-bucket vdo-rpcv-<< parameters.stage >> \
             --profile vdo-rpcv-<< parameters.stage >> \
-            -- region ${AWS_DEFAULT_REGION} \
+            --region ${AWS_DEFAULT_REGION} \
             --capabilities [CAPABILITY_IAM,CAPABILITY_NAMED_IAM] \
             --parameter-overrides Stage=<< parameters.stage >> \
             -t ./template.yaml
