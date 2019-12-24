@@ -20,8 +20,6 @@ commands:
 workflows:
   release:
     jobs:
-      - auth_dev
-      - checkout
       - aws-serverless/deploy:
           name: deploy-dev
           aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
