@@ -1,11 +1,4 @@
 version: 2.1
-
-DEPLOY_JOB_DEFAULTS: &DEPLOY_JOB_DEFAULTS
-  docker:
-    - image: ryandub/xplat-ci-images:latest
-  environment:
-    AWS_PROFILE: vdo-rpcv-dev
-  working_directory: ~/vdo-rpcv
 orbs:
   aws-cli: circleci/aws-cli@0.1.19
 commands:
@@ -25,11 +18,32 @@ commands:
           root: ~/.aws
           paths:
             - "*"
+  build:
+    description: "Build app for stage: << parameters.stage >>"
+    parameters:
+      stage:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Build "rpc-v api"
+          command: |
+            pip install aws-sam-cli
+      - run:
+          name: Build sam app
+          command: |
+            sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ~/rpcv/template.yaml
 jobs:
   dev_build_prep:
     executor: aws-cli/default
     steps:
       - build_prep:
+          stage: dev
+  dev_build:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - build:
           stage: dev
 workflows:
   release:
