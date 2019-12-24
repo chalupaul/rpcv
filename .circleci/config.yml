@@ -29,7 +29,7 @@ commands:
       - save_cache:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
-            - /root/.cache/pypoetry/virtualenvs
+            - ~/.cache/pypoetry/virtualenvs
   unit-test:
     description: All the tests!
     steps:
@@ -37,10 +37,15 @@ commands:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
+            - tox-{{ checksum "tox.ini" }}
       - run:
           name: Run gate tests
           command: |
             poetry run tox
+      - save_cache:
+          key: tox-{{ checksum "tox.ini" }}
+          paths:
+            - ~/.tox
   build:
     description: Build app for stage << parameters.stage >>
     parameters:
