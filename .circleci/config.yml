@@ -1,6 +1,10 @@
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.19
+executors:
+  sam_build:
+    docker:
+      - image: chalupaul/sambuild:latest
 commands:
   build_prep:
     description: "Set up auth and S3 for stage: << parameters.stage >>"
@@ -92,25 +96,21 @@ commands:
             --template ./template.yaml
 jobs:
   gate_tests:
-    docker:
-      - image: chalupaul/sambuild:latest
+    executor: sam_build
     steps:
       - gate_test
   dev_build_prep:
-    docker:
-      - image: chalupaul/sambuild:latest
+    executor: sam_build
     steps:
       - build_prep:
           stage: dev
   dev_build:
-    docker:
-      - image: chalupaul/sambuild:latest
+    executor: sam_build
     steps:
       - sam_build:
           stage: dev
   dev_deploy:
-    docker:
-      - image: chalupaul/sambuild:latest
+    executor: sam_build
     steps:
       - sam_deploy:
           stage: dev
