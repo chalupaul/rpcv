@@ -27,7 +27,7 @@ jobs:
       - checkout
       - aws-serverless/install:
           aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEVV
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY_DEV
           profile-name: vdo-rpcv-dev
       - aws-serverless/build:
           profile-name: vdo-rpcv-dev
