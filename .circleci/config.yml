@@ -59,7 +59,7 @@ commands:
           command: |
             sam validate \
             --profile "vdo-rpcv-<< parameters.stage >>" \
-            --region ${AWS_DEFAULT_REGION}
+            --region ${AWS_DEFAULT_REGION} \
             --template ./template.yaml
       - run:
           name: Build sam app
