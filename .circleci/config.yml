@@ -8,6 +8,7 @@ commands:
       stage:
         type: string
     steps:
+      - checkout
       - aws-cli/install
       - aws-cli/setup:
           profile-name: vdo-rpcv-<< parameters.stage >>
@@ -20,14 +21,14 @@ commands:
             - "*"
       - restore_cache:
           keys:
-            - deps-{{ checksum "project/poetry.lock" }}
+            - deps-{{ checksum "poetry.lock" }}
       - run:
           name: install poetry deps
           command: |
             ls -la ~/project;
             poetry install
       - save_cache:
-          key: deps-{{ checksum "project/poetry.lock" }}
+          key: deps-{{ checksum "poetry.lock" }}
           paths:
             - /root/.cache/pypoetry/virtualenvs
   build:
