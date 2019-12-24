@@ -14,7 +14,6 @@ commands:
     parameters:
       stage:
         type: string
-    executor: aws-cli/default
     steps:
       - aws-cli/install
       - aws-cli/configure:
@@ -27,8 +26,13 @@ commands:
           root: ~/.aws
           paths:
             - "*"
+jobs:
+  dev_build_prep:
+    executor: aws-cli/default
+    steps:
+      - build_prep:
+          stage: dev
 workflows:
   release:
     jobs:
-      - build_prep:
-          stage: dev
+      - dev_build_prep
