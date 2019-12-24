@@ -28,20 +28,21 @@ commands:
       - run:
           name: Build "rpc-v api"
           command: |
-            pip install aws-sam-cli
+            pip install aws-sam-cli awscli poetry
       - run:
           name: Build sam app
           command: |
             sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ~/rpcv/template.yaml
 jobs:
   dev_build_prep:
-    executor: aws-cli/default
+    docker:
+      - image: chalupaul/sambuild:latest
     steps:
       - build_prep:
           stage: dev
   dev_build:
     docker:
-      - image: circleci/python:3.8
+      - image: chalupaul/sambuild:latest
     steps:
       - build:
           stage: dev
@@ -49,3 +50,6 @@ workflows:
   release:
     jobs:
       - dev_build_prep
+      - dev_build:
+          requires:
+            - dev_build_prep
