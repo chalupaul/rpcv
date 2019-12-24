@@ -24,24 +24,14 @@ jobs:
       - attach_workspace:
           at: ~/.aws
       - checkout
-      - aws-serverless/build:
+      - aws-serverless/deploy:
           profile-name: vdo-rpcv-dev
           s3-bucket: vdo-rpcv-dev
           template: ./template.yaml
           stack-name: rpcv-api
-  deploy_dev:
-    executor: aws-serverless/default
-    steps:
-      - attach_workspace:
-          at: ~/.aws-sam
-      - aws-serverless/deploy:
-          profile-name: vdo-rpcv-dev
-          stack-name: vdo-rpcv-dev
   auth_dev:
     executor: aws-serverless/default
     working_directory: ~/vdo-rpcv
-    environment:
-      AWS_REGION: us-west-2
     steps:
       - aws-serverless/install:
           aws-access-key-id: AWS_ACCESS_KEY_ID_DEV
