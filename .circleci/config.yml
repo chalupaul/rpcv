@@ -18,15 +18,11 @@ commands:
           root: ~/.aws
           paths:
             - "*"
-  unit_test:
-    description: All the tests
-    steps:
-      - checkout
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
       - run:
-          name: setup tests
+          name: install poetry deps
           command: |
             ls -la ~;
             poetry install
