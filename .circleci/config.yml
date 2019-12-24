@@ -27,11 +27,13 @@ jobs:
           aws-region: AWS_REGION_DEV
           profile-name: vdo-rpcv-dev
       - aws-serverless/build:
+          aws-region: AWS_REGION_DEV
           profile-name: vdo-rpcv-dev
           s3-bucket: vdo-rpcv-dev
           template: ./template.yaml
       - aws-serverless/install:
-          profile-name: vdo-rpcv-dev
+          aws-region: AWS_REGION_DEV
+          profile-name: vdo-rpcv-devg
 workflows:
   release:
     jobs:
