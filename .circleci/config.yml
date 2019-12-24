@@ -37,17 +37,10 @@ commands:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
-      - restore_cache:
-          keys:
-            - tox-{{ checksum "tox.ini" }}
       - run:
           name: Run gate tests
           command: |
-            poetry run tox
-      - save_cache:
-          key: tox-{{ checksum "tox.ini" }}
-          paths:
-            - ~/.tox
+            poetry run doit -n 4 -f ./tests/gate_tests.py
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
