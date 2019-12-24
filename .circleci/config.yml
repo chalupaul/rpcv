@@ -48,7 +48,7 @@ commands:
           key: tox-{{ checksum "tox.ini" }}
           paths:
             - ~/.tox
-  build:
+  sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
       stage:
@@ -61,7 +61,7 @@ commands:
           name: Build sam app
           command: |
             sam build --profile vdo-rpcv-<< parameters.stage >> --region ${AWS_DEFAULT_REGION} -t ./template.yaml
-  deploy:
+  sam_deploy:
     description: Deploy rpcv- for stage << parameters.stage >>
     parameters:
       stage:
@@ -83,7 +83,7 @@ commands:
             --parameter-overrides Stage=<< parameters.stage >> \
             -t ./template.yaml
 jobs:
-  unit_tests:
+  gate_tests:
     docker:
       - image: chalupaul/sambuild:latest
     steps:
@@ -98,8 +98,15 @@ jobs:
     docker:
       - image: chalupaul/sambuild:latest
     steps:
-      - build:
+      - sam_build:
           stage: dev
+  dev_deploy:
+    docker:
+      - image: chalupaul/sambuild:latest
+    steps:
+      - sam_deploy:
+          stage: dev
+
 workflows:
   release:
     jobs:
