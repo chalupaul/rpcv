@@ -55,6 +55,9 @@ commands:
       stage:
         type: string
     steps:
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
       - attach_workspace:
           at: ~/.aws
       - checkout
@@ -65,6 +68,10 @@ commands:
             --profile "vdo-rpcv-<< parameters.stage >>" \
             --region ${AWS_DEFAULT_REGION} \
             --template ./template.yaml
+      - run:
+          name: Generate requirements.txt
+          command: |
+            pip freeze > requirements.txt
       - run:
           name: Build sam app
           command: |
