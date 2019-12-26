@@ -115,7 +115,7 @@ jobs:
       - sam_deploy:
           stage: dev
 workflows:
-  release:
+  release:dev:
     jobs:
       - dev_build_prep
       - dev_build:

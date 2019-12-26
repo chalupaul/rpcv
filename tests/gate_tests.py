@@ -4,6 +4,7 @@ app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 code_dir = os.path.join(app_dir, "rpcv")
 test_dir = os.path.join(app_dir, "tests")
+template_file = os.path.join(app_dir, "template.yaml")
 
 
 def task_flake8():
@@ -41,3 +42,12 @@ def task_black():
 
 def task_bandit():
     return {"actions": [f"poetry run bandit -r {code_dir}"]}
+
+
+def task_pyproject_lint():
+    return {"actions": [f"poetry check"]}
+
+
+def task_cfn_lint():
+    # Currently E3038 is disabled becaues sam auto-inflates the template.
+    return {"actions": [f"poetry run cfn-lint -i E3038 {template_file}"]}

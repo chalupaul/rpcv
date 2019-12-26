@@ -1,10 +1,69 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Transform: AWS::Serverless-2016-10-31
+Transform: "AWS::Serverless-2016-10-31"
+
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+
 Globals:
   Function:
     Runtime: python3.8
     Tracing: Active
+    MemorySize: 256
+    Timeout: 20
+    Environment:
+      Variables:
+        STAGE: !Ref Stage
+        REGION: !Ref "AWS::Region"
+
 Resources:
+  RpcvApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+      MinimumCompressionSize: 1024
+      Auth:
+        DefaultAuthorizer: RpcvAuthorizer
+        Authorizers:
+          RpcvAuthorizer:
+            FunctionArn: !GetAtt RpcvLambdaAuthorizer.Arn
+            FunctionPayloadType: REQUEST
+            Identity:
+              Headers:
+                - x-auth-token
+
+  RpcvApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join
+        - "-"
+        - - !Ref Stage
+          - "rpcv-api"
+      CodeUri: ./rpcv/app.py
+      Handler: app.handler
+      Events:
+        proxyroot:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+        proxypass:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+  RpcvLambdaAuthorizer:
+    Type: AWS::Serverless::function
+    Properties:
+      FunctionName: !Join
+        - "-"
+        - - !Ref Stage
+          - "rpcv-authorizor"
+      CodeUri: ./rpcv/api-authorizer/
+      Handler: authorizer.rackspace_handler
+
   ClustersDB:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -15,6 +74,7 @@ Resources:
       KeySchema:
         - AttributeName: uuid
           KeyType: HASH
+
   HypervisorsDB:
     Type: AWS::DynamoDB::Table
     Properties:
