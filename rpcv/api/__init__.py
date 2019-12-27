@@ -1,8 +1,13 @@
+__version__ = "0.1.0"
+import os
 import sys
 
-__version__ = "0.1.0"
-print(sys.path)
-# Import controllers for flask_rebar
-from rpcv.api.controllers import hypervisor, cluster  # noqa: F401
+# This hacks in the correct directory so that
+# it's usable in local flask and in lambda.
+app_base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(app_base)
 
-from rpcv.api.app import run_app  # noqa: F401
+# Import controllers for flask_rebar
+from api.controllers import hypervisor, cluster  # noqa: F401
+
+from api.app import run_app  # noqa: F401
