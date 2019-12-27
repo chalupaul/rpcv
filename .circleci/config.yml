@@ -75,7 +75,7 @@ commands:
       - run:
           name: Run gate tests
           environment:
-            STAGE: << parameter.stage >>
+            STAGE: << parameters.stage >>
             REGION: us-west-2
           command: |
             poetry run doit -n 4 -f ./util/gate_tests.py
