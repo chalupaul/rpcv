@@ -86,8 +86,8 @@ commands:
           name: Run unit tests
           command: |
             prev=$(poetry run coverage report | grep TOTAL | awk '{print $NF}' | sed 's/%//')
-            target=$( [[ $prev == "" ]] && echo 10 || echo $prev )
-            echo "$prev and $target"
+#            target=$( [[ $prev == "" ]] && echo 10 || echo $prev )
+            echo "$prev"
 #            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
 #            poetry run coverage report -m --fail-under=$target
       - save_cache:
