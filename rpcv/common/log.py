@@ -1,6 +1,5 @@
 import logging
 import structlog
-from structlog.processors import JSONRenderer
 from structlog.stdlib import filter_by_level
 
 
@@ -15,6 +14,8 @@ def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyPro
             structlog.stdlib.add_logger_name,
             # Adds level=info, debug, etc.
             structlog.stdlib.add_log_level,
+            # Who doesnt like timestamps?
+            structlog.processors.TimeStamper(fmt="iso"),
             # Performs the % string interpolation as expected
             structlog.stdlib.PositionalArgumentsFormatter(),
             # Include the stack when stack_info=True
@@ -41,6 +42,9 @@ def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyPro
     logging.basicConfig(level=logging.DEBUG)
     logger = structlog.wrap_logger(
         logging.getLogger(log_name),
-        processors=[filter_by_level, JSONRenderer(indent=2, sort_keys=True)],
+        processors=[
+            filter_by_level,
+            structlog.processors.JSONRenderer(indent=2, sort_keys=True),
+        ],
     )
     return logger
