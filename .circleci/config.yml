@@ -71,10 +71,20 @@ commands:
           name: Run gate tests
           command: |
             poetry run doit -n 4 -f ./gate_tests.py
+      - restore_cache:
+          keys:
+            - rpcv-coverage
       - run:
           name: Run unit tests
           command: |
-            poetry run pytest --cov=rpcv ./rpcv/tests
+            prev=$(poetry run coverage report | grep TOTAL | awk '{print $NF}' | sed 's/%//')
+            target=$( [[ $prev == "" ]] && echo 10 || echo $prev )
+            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
+            poetry run coverage report -m --fail-under=$target
+      - save_cache:
+          paths:
+            - ./coverage
+          key: rpcv-coverage
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
@@ -111,9 +121,6 @@ commands:
       - attach_workspace:
           at: ~/.aws
       - checkout
-      - restore_cache:
-          keys:
-            - rpcv-sam-cache
       - restore_cache:
           keys:
             - deplayer-{{ checksum "poetry.lock" }}

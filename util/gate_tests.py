@@ -1,8 +1,7 @@
 import os
 from typing import List
 
-app_dir = os.path.dirname(os.path.abspath(__file__))
-print(app_dir)
+app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 code_root = os.path.join(app_dir, "rpcv")
 
 
