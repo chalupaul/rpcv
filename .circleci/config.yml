@@ -86,7 +86,7 @@ commands:
           name: Run unit tests
           command: |
             target=$(poetry run ci-get-last-coverage)
-            print "Last time: $target"
+            echo "Last time: $target"
             poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
             poetry run coverage report -m --fail-under=$target
       - save_cache:
