@@ -9,7 +9,7 @@ from typing import Any, Dict
 
 from rpcv.common import log
 
-logger = log.get_logger()
+logger = log.get_logger(__name__)
 
 rebar = Rebar()
 registry = rebar.create_handler_registry(prefix="/api")
@@ -21,7 +21,7 @@ def create_app() -> Flask:
     dot_env = DotEnv()
     env_path = Path(os.path.abspath(__file__)).parent
     stage = os.environ.get("STAGE", "dev")
-    logger("Initializing for stage", stage=stage)
+    logger.info("Initializing for stage", stage=stage)
     env_file = os.path.join(env_path, f".env.{stage}")
     dot_env.init_app(app, env_file=env_file, verbose_mode=True)
 
