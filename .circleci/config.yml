@@ -91,7 +91,7 @@ commands:
             poetry run coverage report -m --fail-under=$target
       - save_cache:
           paths:
-            - ./coverage
+            - ./.coverage
           key: rpcv-coverage
   sam_build:
     description: Build app for stage << parameters.stage >>
