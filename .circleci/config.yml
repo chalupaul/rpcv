@@ -62,6 +62,9 @@ commands:
           key: deplayer-{{ checksum "poetry.lock" }}
   gate_test:
     description: All the tests!
+    parameters:
+      stage:
+        type: string
     steps:
       - checkout
       - attach_workspace:
@@ -139,7 +142,8 @@ jobs:
   gate_tests:
     <<: *deploy_defaults
     steps:
-      - gate_test
+      - gate_test:
+          stage: dev
   dev_build_prep:
     <<: *deploy_defaults
     steps:
