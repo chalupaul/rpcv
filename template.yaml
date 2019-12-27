@@ -75,7 +75,7 @@ Resources:
         - "-"
         - - !Ref Stage
           - "rpcv-authorizor"
-      CodeUri: ./rpcv/api-authorizer/
+      CodeUri: ./rpcv/api_authorizer/
       Handler: authorizer.rackspace_handler
 
   ClustersDB:
