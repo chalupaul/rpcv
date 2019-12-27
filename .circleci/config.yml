@@ -79,7 +79,7 @@ commands:
             echo "Previous test coverage percentage: ${target}"
       - restore_cache:
           keys:
-            - coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
+            - coverage-{{ checksum "coverage-report" }}-<< parameters.stage >>
       - run:
           name: Run unit tests
           command: |
@@ -92,7 +92,7 @@ commands:
           paths:
             - .coverage
           key:
-            coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
+            coverage-{{ checksum "coverage-report" }}-<< parameters.stage >>
   gate_test:
     description: All the tests!
     parameters:
