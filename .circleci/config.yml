@@ -68,7 +68,10 @@ commands:
             --profile "vdo-rpcv-<< parameters.stage >>" \
             --region ${AWS_DEFAULT_REGION} \
             --template ./template.yaml
-
+      - run:
+          name: Build requirements.txt
+          command: |
+            pip  freeze | grep -v rpcv.git > ./rpcv/api/requirements.txt
       - run:
           name: Build sam app
           command: |
