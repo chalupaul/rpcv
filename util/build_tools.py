@@ -1,11 +1,16 @@
 import os
+import shutil
 import toml
 import subprocess
 from typing import Dict, List
 
+app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+home_dir = os.path.expanduser("~")
+deps_file_name = "lambda-layer-requirements.txt"
+target_deps_file = os.path.join(home_dir, deps_file_name)
+
 
 def get_toml_requirements() -> List[str]:
-    app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     toml_file = os.path.join(app_dir, "pyproject.toml")
     toml_config = toml.load(toml_file)
     toml_deps = toml_config["tool"]["poetry"]["dependencies"].keys()
@@ -51,5 +56,15 @@ def make_prod_requirements(target_file: str) -> None:
 
 
 def poetry_wrapper() -> None:
-    target_file = os.path.join(os.path.expanduser("~"), "lambda-layer-requirements.txt")
-    make_prod_requirements(target_file)
+    make_prod_requirements(target_deps_file)
+
+
+def distribute_requirements() -> None:
+    projects_dir = os.path.join(app_dir, "rpcv")
+    projects = [
+        os.path.join(projects_dir, d)
+        for d in os.listdir(projects_dir)
+        if not d.startswith("_")
+    ]
+    for project in projects:
+        shutil.copyfile(target_deps_file, os.path.join(project, deps_file_name))
