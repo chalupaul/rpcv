@@ -62,11 +62,13 @@ Resources:
           Properties:
             Path: /
             Method: ANY
+            RestApiId: !Ref RpcvApiGateway
         proxypass:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
+            RestApiId: !Ref RpcvApiGateway
 
   RpcvLambdaAuthorizer:
     Type: AWS::Serverless::Function

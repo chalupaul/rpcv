@@ -32,7 +32,7 @@ def get_pip_requirements() -> Dict[str, str]:
 
 def make_prod_requirements(target_file: str) -> None:
     """
-    Word to the wise: Often - and _ are interchangeable. 
+    Word to the wise: Often - and _ are interchangeable.
     Also upper/lower casing must match. Watch your imports to poetry.
     """
     toml_deps = get_toml_requirements()
