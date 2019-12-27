@@ -198,6 +198,6 @@ workflows:
             - dev_build_prep
       - dev_deploy:
           requires:
-            - gate_tests
+            - dev_gate_tests
             - dev_unit_tests
             - dev_build
