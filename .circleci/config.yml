@@ -86,11 +86,9 @@ commands:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
-      - run:
-          name: Download previous coverage report
-          command: |
-            aws s3 --profile vdo-rpcv-<< parameters.stage >> \
-            cp s3://vdo-rpcv-<< parameters.stage >>/.coverage .coverage || true
+      - restore_cache:
+          keys:
+            - rpcv-coverage-
       - run:
           name: Generate previous coverage report
           command: |
@@ -105,11 +103,10 @@ commands:
           name: Check coverage percentage
           command: |
             poetry run coverage report -m --fail-under=${target}
-      - run:
-          name: Upload coverage report
-          command: |
-            aws s3 --profile vdo-rpcv-<< parameters.stage >> \
-            cp .coverage s3://vdo-rpcv-<< parameters.stage >>
+      - save_cache:
+          paths:
+            - .coverage
+          key: rpcv-coverage-{{ checksome ".coverage" }}
   gate_test:
     description: All the tests!
     parameters:
@@ -209,11 +206,11 @@ workflows:
       - dev_gate_tests:
           requires:
             - dev_build_prep
-      - dev_unit_tests:
+      - dev_unit_coverage_tests:
           requires:
             - dev_build_prep
       - dev_deploy:
           requires:
             - dev_gate_tests
-            - dev_unit_tests
+            - dev_unit_coverage_tests
             - dev_build
