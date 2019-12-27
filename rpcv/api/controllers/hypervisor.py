@@ -3,8 +3,8 @@ from uuid import UUID
 import flask_rebar
 from flask_rebar import errors
 
-from rpcv.app import registry
-from rpcv.schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
+from rpcv.api.app import registry
+from rpcv.api.schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
 
 
 @registry.handles(

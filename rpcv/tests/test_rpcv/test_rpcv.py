@@ -1,4 +1,4 @@
-from rpcv import __version__
+from rpcv.api import __version__
 
 
 def test_version():

@@ -40,7 +40,7 @@ Resources:
         - "-"
         - - !Ref Stage
           - "rpcv-api"
-      CodeUri: ./rpcv/app.py
+      CodeUri: ./rpcv/api/
       Handler: app.handler
       Events:
         proxyroot:

@@ -3,8 +3,8 @@ from uuid import UUID
 import flask_rebar
 from flask_rebar import errors
 
-from rpcv.app import registry
-from rpcv.schemas.cluster import ClusterSchema, CreateClusterSchema, ClusterStatus
+from rpcv.api.app import registry
+from rpcv.api.schemas.cluster import ClusterSchema, CreateClusterSchema, ClusterStatus
 
 
 @registry.handles(
