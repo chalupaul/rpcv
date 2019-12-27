@@ -85,9 +85,9 @@ commands:
       - run:
           name: Run unit tests
           command: |
-            poetry run coverage report
-#            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
-#            poetry run coverage report -m --fail-under=$target
+            target=$(poetry run ci-get-last-coverage)
+            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
+            poetry run coverage report -m --fail-under=$target
       - save_cache:
           paths:
             - ./coverage
