@@ -92,6 +92,9 @@ commands:
             --profile vdo-rpcv-<< parameters.stage >> \
             --region us-west-2 \
             --template ./template.yaml
+      - run:
+          name: List build artifacts
+          command: ls .aws-sam/build
   sam_deploy:
     description: Deploy rpcv for stage << parameters.stage >>
     parameters:
