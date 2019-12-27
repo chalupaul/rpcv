@@ -27,6 +27,8 @@ def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyPro
             structlog.processors.UnicodeDecoder(),
             # Creates the necessary args, kwargs for log()
             structlog.stdlib.render_to_log_kwargs,
+            # mmm json
+            structlog.processors.JSONRenderer(indent=2, sort_keys=True),
         ],
         # Our "event_dict" is explicitly a dict
         # There's also structlog.threadlocal.wrap_dict(dict) in some examples
@@ -40,11 +42,6 @@ def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyPro
         cache_logger_on_first_use=True,
     )
     logging.basicConfig(level=logging.DEBUG)
-    logger = structlog.wrap_logger(
-        logging.getLogger(log_name),
-        processors=[
-            filter_by_level,
-            structlog.processors.JSONRenderer(indent=2, sort_keys=True),
-        ],
-    )
+    logger = structlog.wrap_logger(logging.getLogger(log_name))
+    logger.setLevel(logging.DEBUG)  # Good old aws screwing things up
     return logger
