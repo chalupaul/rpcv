@@ -60,6 +60,38 @@ commands:
           paths:
             - ./dependencies
           key: deplayer-{{ checksum "poetry.lock" }}
+  unit_test:
+    description: Run unit tests
+    parameters:
+      stage:
+        type: string
+    steps:
+      - checkout
+      - restore_cache:
+        keys:
+          - deps-{{ checksum "poetry.lock" }}
+      - run:
+          name: Generate previous coverage report
+          command: |
+            poetry run coverage report -m | tee coverage-report
+            target=$(poetry run ci-get-last-coverage)
+            echo "Last time: $target"
+      - restore_cache:
+        keys:
+          - coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
+      - run:
+          name: Run unit tests
+          command: |
+            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
+      - run:
+          name: Check coverage percentage
+          command: |
+            poetry run coverage report -m --fail-under=$target | tee coverage-report
+      - save_cache:
+          paths:
+            - .coverage
+          keys:
+            coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
   gate_test:
     description: All the tests!
     parameters:
@@ -79,20 +111,7 @@ commands:
             REGION: us-west-2
           command: |
             poetry run doit -n 4 -f ./util/gate_tests.py
-      - restore_cache:
-          keys:
-            - rpcv-coverage
-      - run:
-          name: Run unit tests
-          command: |
-            target=$(poetry run ci-get-last-coverage)
-            echo "Last time: $target"
-            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
-            poetry run coverage report -m --fail-under=$target
-      - save_cache:
-          paths:
-            - ./.coverage
-          key: rpcv-coverage
+
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
@@ -139,10 +158,15 @@ commands:
             --no-fail-on-empty-changeset \
             --template ./template.yaml
 jobs:
-  gate_tests:
+  dev_gate_tests:
     <<: *deploy_defaults
     steps:
       - gate_test:
+          stage: dev
+  dev_unit_tests:
+    <<: *deploy_defaults
+    steps:
+      - unit_test:
           stage: dev
   dev_build_prep:
     <<: *deploy_defaults
@@ -166,10 +190,14 @@ workflows:
       - dev_build:
           requires:
             - dev_build_prep
-      - gate_tests:
+      - dev_gate_tests:
+          requires:
+            - dev_build_prep
+      - dev_unit_tests:
           requires:
             - dev_build_prep
       - dev_deploy:
           requires:
             - gate_tests
+            - dev_unit_tests
             - dev_build
