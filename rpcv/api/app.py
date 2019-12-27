@@ -7,7 +7,7 @@ from flask_rebar import Rebar
 
 from typing import Any, Dict
 
-from rpcv.common import log
+from common import log
 
 logger = log.get_logger(__name__)
 
