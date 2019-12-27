@@ -38,18 +38,18 @@ commands:
             - "*"
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
       - run:
           name: install poetry deps
           command: |
             poetry install
       - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
+          key: deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
           paths:
             - ~/.cache/pypoetry/virtualenvs
       - restore_cache:
           keys:
-            - deplayer-{{ checksum "poetry.lock" }}
+            - deplayer-<< parameters.stage >>-{{ checksum "poetry.lock" }}
       - run:
           name: build dependency lambda layer
           command: |
@@ -59,7 +59,7 @@ commands:
       - save_cache:
           paths:
             - ./dependencies
-          key: deplayer-{{ checksum "poetry.lock" }}
+          key: deplayer-<< parameters.stage >>-{{ checksum "poetry.lock" }}
   unit_test:
     description: Run unit tests
     parameters:
@@ -69,7 +69,7 @@ commands:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}  
+            - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}  
       - run:
           name: Run unit tests
           command: |
@@ -85,10 +85,10 @@ commands:
           at: ~/.aws
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
       - restore_cache:
           keys:
-            - rpcv-coverage-
+            - rpcv-coverage-<< parameters.stage >>-
       - run:
           name: Generate previous coverage report
           command: |
@@ -106,7 +106,7 @@ commands:
       - save_cache:
           paths:
             - .coverage
-          key: rpcv-coverage-{{ checksome ".coverage" }}
+          key: rpcv-coverage-<< parameters.stage >>-{{ checksum ".coverage" }}
   gate_test:
     description: All the tests!
     parameters:
@@ -118,7 +118,7 @@ commands:
           at: ~/.aws
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
       - run:
           name: Run gate tests
           environment:
@@ -135,7 +135,7 @@ commands:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
       - restore_cache:
           keys:
             - rpcv-sam-cache
@@ -156,7 +156,7 @@ commands:
       - checkout
       - restore_cache:
           keys:
-            - deplayer-{{ checksum "poetry.lock" }}
+            - deplayer-<< parameters.stage >>-{{ checksum "poetry.lock" }}
       - run:
           name: Deploy app
           command: |
