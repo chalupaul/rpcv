@@ -90,7 +90,7 @@ commands:
       - save_cache:
           paths:
             - .coverage
-          keys:
+          key:
             coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
   gate_test:
     description: All the tests!
@@ -128,7 +128,6 @@ commands:
       - attach_workspace:
           at: ~/.aws
       - save_cache:
-          name: Cache sam build
           paths:
             - .aws-sam/build
           key: rpcv-sam-cache
