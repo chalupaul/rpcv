@@ -12,6 +12,8 @@ Globals:
     Tracing: Active
     MemorySize: 256
     Timeout: 20
+    Layers:
+      - !Ref RpcvDependencyLayer
     Environment:
       Variables:
         STAGE: !Ref Stage
@@ -32,6 +34,18 @@ Resources:
             Identity:
               Headers:
                 - x-auth-token
+
+  RpcvDependencyLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Join
+        - "-"
+        - - !Ref Stage
+          - "rpcv-deps"
+      CompatibleRuntimes:
+        - python3.8
+      ContentUri: ./dependencies
+      RetentionPolicy: Delete
 
   RpcvApi:
     Type: AWS::Serverless::Function

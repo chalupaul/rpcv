@@ -47,6 +47,19 @@ commands:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
             - ~/.cache/pypoetry/virtualenvs
+      - restore_cache:
+          keys:
+            - deplayer-{{ checksum "poetry.lock" }}
+      - run:
+          name: build dependency lambda layer
+          command: |
+            poetry run ci-gen-deps
+            mkdir -p ./dependencies/python/lib/python3.8/site-packages
+            pip install -r ~/lambda-layer-requirements.txt -t ./dependencies/python/lib/python3.8/site-packages
+      - save_cache:
+          paths:
+            - ./dependencies
+          key: deplayer-{{ checksum "poetry.lock" }}
   gate_test:
     description: All the tests!
     steps:
@@ -112,6 +125,9 @@ commands:
       - restore_cache:
           keys:
             - rpcv-sam-cache
+      - restore_cache:
+          keys:
+            - deplayer-{{ checksum "poetry.lock" }}
       - run:
           name: Deploy app
           command: |
