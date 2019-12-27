@@ -16,14 +16,16 @@ commands:
       - aws-cli/install
       - run:
           name: Set region variable
-          command: export AWS_REGION=us-west-2
+          command: |
+            echo 'export AWS_REGION=us-west-2' >> $BASH_ENV
+            source $BASH_ENV
       - aws-cli/setup:
           profile-name: vdo-rpcv-<< parameters.stage >>
           aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.stage >>
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.stage >>
           aws-region: AWS_REGION
       - run:
-          name: Ensule S3 bucket
+          name: Ensure S3 bucket
           command: |
             aws s3api head-bucket \
             --profile vdo-rpcv-<< parameters.stage >> \
