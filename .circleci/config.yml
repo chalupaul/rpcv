@@ -68,7 +68,7 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/.aws
+          at: ~/.aws
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
