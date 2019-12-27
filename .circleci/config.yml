@@ -1,5 +1,5 @@
 version: 2.1
-DEPLOY_JOB_DEFAULTS: &DEPLOY_JOB_DEFAULTS
+deploy_defaults: &deploy_defaults
   executor: sam_build
   environment:
     AWS_DEFAULT_REGION: us-west-2
@@ -72,6 +72,9 @@ commands:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
+      - restore_cache:
+          keys:
+            - rpcv-sam-cache
       - attach_workspace:
           at: ~/.aws
       - run:
@@ -92,6 +95,11 @@ commands:
             --profile vdo-rpcv-<< parameters.stage >> \
             --region us-west-2 \
             --template ./template.yaml
+      - save_cache:
+          name: Cache sam build
+          paths:
+            - .aws-sam/build
+          key: rpcv-sam-cache
       - run:
           name: List build artifacts
           command: ls .aws-sam/build/RpcvApi
@@ -104,6 +112,9 @@ commands:
       - attach_workspace:
           at: ~/.aws
       - checkout
+      - restore_cache:
+          keys:
+            - rpcv-sam-cache
       - run:
           name: Deploy app
           command: |
@@ -119,21 +130,21 @@ commands:
             --template ./template.yaml
 jobs:
   gate_tests:
-    <<: *DEPLOY_JOB_DEFAULTS
+    <<: *deploy_defaults
     steps:
       - gate_test
   dev_build_prep:
-    <<: *DEPLOY_JOB_DEFAULTS
+    <<: *deploy_defaults
     steps:
       - build_prep:
           stage: dev
   dev_build:
-    <<: *DEPLOY_JOB_DEFAULTS
+    <<: *deploy_defaults
     steps:
       - sam_build:
           stage: dev
   dev_deploy:
-    <<: *DEPLOY_JOB_DEFAULTS
+    <<: *deploy_defaults
     steps:
       - sam_deploy:
           stage: dev
