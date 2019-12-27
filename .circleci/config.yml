@@ -112,7 +112,6 @@ commands:
             REGION: us-west-2
           command: |
             poetry run doit -n 4 -f ./util/gate_tests.py
-
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
