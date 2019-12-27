@@ -90,8 +90,6 @@ commands:
           paths:
             - ./coverage
           key: rpcv-coverage
-  unit_test:
-    description: Unit tests
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
