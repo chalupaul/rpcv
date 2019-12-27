@@ -37,7 +37,7 @@ structlog.configure(
 )
 
 
-def get_logger(log_name=__name__) -> structlog._config.BoundLoggerLazyProxy:
+def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyProxy:
     """Just stubbed out in case we want later configuration."""
     logging.basicConfig(level=logging.DEBUG)
     logger = structlog.wrap_logger(
