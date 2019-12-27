@@ -74,8 +74,9 @@ commands:
           name: Generate previous coverage report
           command: |
             (poetry run coverage report -m 2>&1 || true ) | tee coverage-report
-            target=$(poetry run ci-get-last-coverage)
-            echo "Last time: $target"
+            target=$(poetry run ci-get-last-coverage)"
+            echo "export target=${target}" >> $BASH_ENV
+            echo "Previous test coverage percentage: ${target}"
       - restore_cache:
           keys:
             - coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
@@ -86,7 +87,7 @@ commands:
       - run:
           name: Check coverage percentage
           command: |
-            poetry run coverage report -m --fail-under=$target | tee coverage-report
+            poetry run coverage report -m --fail-under=${target} | tee coverage-report
       - save_cache:
           paths:
             - .coverage
