@@ -136,15 +136,8 @@ commands:
       - restore_cache:
           keys:
             - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
-      - restore_cache:
-          keys:
-            - rpcv-sam-cache
       - attach_workspace:
           at: ~/.aws
-      - save_cache:
-          paths:
-            - .aws-sam/build
-          key: rpcv-sam-cache
   sam_deploy:
     description: Deploy rpcv for stage << parameters.stage >>
     parameters:
