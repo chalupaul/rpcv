@@ -62,3 +62,18 @@ def task_pyproject_lint():
 def task_cfn_lint():
     # Currently E3038 is disabled becaues sam auto-inflates the template.
     return {"actions": [f"poetry run cfn-lint -i E3038 -t {template_file}"]}
+
+
+def task_sam_lint():
+    stagename = os.environ.get("STAGE", "dev")
+    region = os.environ.get("REGION", "us-west-2")
+    return {
+        "actions": [
+            (
+                "poetry run sam validate"
+                f" --profile vdo-rpcv-{stagename}"
+                f" --region {region}"
+                " --template ./template.yaml"
+            )
+        ]
+    }

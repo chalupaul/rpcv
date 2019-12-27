@@ -64,13 +64,18 @@ commands:
     description: All the tests!
     steps:
       - checkout
+      - attach_workspace:
+        at: ~/.aws
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
       - run:
           name: Run gate tests
+          environment:
+            STAGE: << parameter.stage >>
+            REGION: us-west-2
           command: |
-            poetry run doit -n 4 -f ./gate_tests.py
+            poetry run doit -n 4 -f ./util/gate_tests.py
       - restore_cache:
           keys:
             - rpcv-coverage
@@ -85,6 +90,8 @@ commands:
           paths:
             - ./coverage
           key: rpcv-coverage
+  unit_test:
+    description: Unit tests
   sam_build:
     description: Build app for stage << parameters.stage >>
     parameters:
@@ -100,13 +107,6 @@ commands:
             - rpcv-sam-cache
       - attach_workspace:
           at: ~/.aws
-      - run:
-          name: Validate sam app
-          command: |
-            sam validate \
-            --profile "vdo-rpcv-<< parameters.stage >>" \
-            --region us-west-2 \
-            --template ./template.yaml
       - save_cache:
           name: Cache sam build
           paths:
