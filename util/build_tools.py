@@ -71,14 +71,16 @@ def distribute_requirements() -> None:
 
 
 def get_last_coverage_run() -> int:
-    if os.path.exists(os.path.join(app_dir, ".coverage")):
-        return 10  # Default value
-    output = subprocess.check_output(
-        "coverage report", shell=True, text=True, cwd=app_dir
-    )
-    total_line = output.split("\n")[-2]
-    total_fields = [x for x in total_line.split(" ") if x != ""]
-    return total_fields[-1][:-1]
+    try:
+        output = subprocess.check_output(
+            "coverage report", shell=True, text=True, cwd=app_dir
+        )
+        total_line = output.split("\n")[-2]
+        total_fields = [x for x in total_line.split(" ") if x != ""]
+        return total_fields[-1][:-1]
+    except subprocess.CalledProcessError as e:
+        print(e)
+        return 10
 
 
 def poetry_wrapper_coverage() -> None:
