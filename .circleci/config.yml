@@ -68,8 +68,8 @@ commands:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - deps-{{ checksum "poetry.lock" }}
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
       - run:
           name: Generate previous coverage report
           command: |
@@ -77,8 +77,8 @@ commands:
             target=$(poetry run ci-get-last-coverage)
             echo "Last time: $target"
       - restore_cache:
-        keys:
-          - coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
+          keys:
+            - coverage-{{ checksum "coverage-report" }}-{{ parameters.stage }}
       - run:
           name: Run unit tests
           command: |
