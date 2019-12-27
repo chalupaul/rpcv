@@ -2,7 +2,7 @@ version: 2.1
 DEPLOY_JOB_DEFAULTS: &DEPLOY_JOB_DEFAULTS
   executor: sam_build
   environment:
-    DEFAULT_AWS_REGION: us-west-2
+    AWS_DEFAULT_REGION: us-west-2
 orbs:
   aws-cli: circleci/aws-cli@0.1.19
 executors:
