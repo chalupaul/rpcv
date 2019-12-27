@@ -9,7 +9,7 @@ from flask_rebar import Rebar
 
 from common import log
 
-logger = log.get_logger(__name__)
+logger = log.get_logger(__file__)
 
 rebar = Rebar()
 registry = rebar.create_handler_registry(prefix="/api")
