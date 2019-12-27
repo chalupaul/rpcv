@@ -14,11 +14,14 @@ commands:
     steps:
       - checkout
       - aws-cli/install
+      - run:
+          name: Set region variable
+          command: export AWS_REGION=us-west-2
       - aws-cli/setup:
           profile-name: vdo-rpcv-<< parameters.stage >>
           aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.stage >>
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.stage >>
-          aws-region: us-west-2
+          aws-region: AWS_REGION
       - run: aws --profile vdo-rpcv-<< parameters.stage >> s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws --profile vdo-rpcv-<< parameters.stage >> s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
       - persist_to_workspace:
           root: ~/.aws
