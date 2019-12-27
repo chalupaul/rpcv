@@ -1,6 +1,5 @@
 import logging
 import structlog
-from structlog.stdlib import filter_by_level
 
 
 def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyProxy:
