@@ -55,12 +55,12 @@ commands:
       stage:
         type: string
     steps:
+      - checkout
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
       - attach_workspace:
           at: ~/.aws
-      - checkout
       - run:
           name: Validate sam app
           command: |
@@ -91,6 +91,7 @@ commands:
       - run:
           name: Deploy app
           command: |
+            echo ${AWS_DEFAULT_REGION};
             sam deploy \
             --stack-name rpcv-api-<< parameters.stage >> \
             --s3-prefix << parameters.stage >> \
