@@ -35,7 +35,7 @@ def run_app() -> None:
 
 def handler(event: Dict[str, Any], context: Dict[str, Any]) -> Any:
     app = create_app()
-    base64_types = {"image/png"}
+    base64_types = ["image/png"]
     return awsgi.response(app, event, context, base64_content_types=base64_types)
 
 
