@@ -67,13 +67,14 @@ def task_cfn_lint():
 def task_sam_lint():
     stagename = os.environ.get("STAGE", "dev")
     region = os.environ.get("REGION", "us-west-2")
+    template_file = os.path.join(app_dir, "template.yaml")
     return {
         "actions": [
             (
                 "poetry run sam validate"
                 f" --profile vdo-rpcv-{stagename}"
                 f" --region {region}"
-                " --template ./template.yaml"
+                f" --template {template_file}"
             )
         ]
     }
