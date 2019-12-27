@@ -65,15 +65,15 @@ commands:
     parameters:
       stage:
         type: string
-      steps:
-        - checkout
-        - restore_cache:
-            keys:
-              - deps-{{ checksum "poetry.lock" }}  
-        - run:
-            name: Run unit tests
-            command: |
-              poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}  
+      - run:
+          name: Run unit tests
+          command: |
+            poetry run coverage run -m --branch --omit='*/virtualenvs/*,*/tests/*' pytest ./rpcv/tests/
   unit_coverage_test:
     description: Run unit tests with coverage
     parameters:
