@@ -73,7 +73,7 @@ commands:
       - run:
           name: Generate previous coverage report
           command: |
-            poetry run coverage report -m | tee coverage-report
+            (poetry run coverage report -m 2>&1 || true ) | tee coverage-report
             target=$(poetry run ci-get-last-coverage)
             echo "Last time: $target"
       - restore_cache:
