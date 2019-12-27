@@ -78,8 +78,7 @@ def get_last_coverage_run() -> int:
         total_line = output.split("\n")[-2]
         total_fields = [x for x in total_line.split(" ") if x != ""]
         return total_fields[-1][:-1]
-    except subprocess.CalledProcessError as e:
-        print(f"::{e}::")
+    except subprocess.CalledProcessError:
         return 10
 
 
