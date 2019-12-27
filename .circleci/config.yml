@@ -22,7 +22,16 @@ commands:
           aws-access-key-id: AWS_ACCESS_KEY_ID_<< parameters.stage >>
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY_<< parameters.stage >>
           aws-region: AWS_REGION
-      - run: aws --profile vdo-rpcv-<< parameters.stage >> s3api head-bucket --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 ||  aws --profile vdo-rpcv-<< parameters.stage >> s3 mb s3://"vdo-rpcv-<< parameters.stage >>" --region us-west-2
+      - run:
+          name: Ensule S3 bucket
+          command: |
+            aws s3api head-bucket \
+            --profile vdo-rpcv-<< parameters.stage >> \
+            --bucket "vdo-rpcv-<< parameters.stage >>" >/dev/null 2>&1 \
+            || aws s3 mb \
+            --profile vdo-rpcv-<< parameters.stage >> \
+            --region us-west-2 \
+            s3://"vdo-rpcv-<< parameters.stage >>"
       - persist_to_workspace:
           root: ~/.aws
           paths:
