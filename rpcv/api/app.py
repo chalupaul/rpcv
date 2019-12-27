@@ -1,11 +1,11 @@
 import os
-import awsgi
 from pathlib import Path
+from typing import Any, Dict
+
+import awsgi
 from flask import Flask
 from flask_dotenv import DotEnv
 from flask_rebar import Rebar
-
-from typing import Any, Dict
 
 from common import log
 
