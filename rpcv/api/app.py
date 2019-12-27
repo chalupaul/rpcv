@@ -15,8 +15,8 @@ def create_app() -> Flask:
 
     app = Flask(__name__)
     dot_env = DotEnv()
-    env_path = Path(os.path.abspath(__file__)).parent.parent.parent
-    stage = os.environ.get("stage", "dev")
+    env_path = Path(os.path.abspath(__file__)).parent
+    stage = os.environ.get("STAGE", "dev")
     env_file = os.path.join(env_path, f".env.{stage}")
     dot_env.init_app(app, env_file=env_file, verbose_mode=True)
 
