@@ -55,7 +55,7 @@ Resources:
             Method: ANY
 
   RpcvLambdaAuthorizer:
-    Type: AWS::Serverless::function
+    Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Join
         - "-"

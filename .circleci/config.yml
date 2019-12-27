@@ -100,9 +100,6 @@ commands:
           paths:
             - .aws-sam/build
           key: rpcv-sam-cache
-      - run:
-          name: List build artifacts
-          command: ls .aws-sam/build/RpcvApi
   sam_deploy:
     description: Deploy rpcv for stage << parameters.stage >>
     parameters:
