@@ -1,4 +1,4 @@
-from api import __version__
+from api.app import __version__
 
 
 def test_version():
