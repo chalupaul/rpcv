@@ -44,6 +44,9 @@ ci-gen-deps = 'util.build_tools:poetry_wrapper'
 ci-distribute-deps = 'util.build_tools:distribute_requirements'
 ci-get-last-coverage = 'util.build_tools:poetry_wrapper_coverage'
 
+[pytest]
+junit_family = "legacy"
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
