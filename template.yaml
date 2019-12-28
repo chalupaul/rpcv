@@ -55,7 +55,7 @@ Resources:
         - - !Ref Stage
           - "rpcv-api"
       CodeUri: ./rpcv/api/
-      Handler: app.server.handler
+      Handler: server.handlers.handler
       Events:
         proxyroot:
           Type: Api
