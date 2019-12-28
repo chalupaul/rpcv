@@ -3,8 +3,8 @@ from uuid import UUID
 import flask_rebar
 from flask_rebar import errors
 
-from api.app import registry
-from api.schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
+from ..app import registry
+from ..schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
 from typing import Dict, Tuple, Any
 
 

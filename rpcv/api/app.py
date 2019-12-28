@@ -7,7 +7,7 @@ from flask import Flask
 from flask_dotenv import DotEnv
 from flask_rebar import Rebar
 
-from common import log
+from ..common import log
 
 logger = log.get_logger(__file__)
 
