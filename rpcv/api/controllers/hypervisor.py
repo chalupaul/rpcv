@@ -3,9 +3,10 @@ from uuid import UUID
 import flask_rebar
 from flask_rebar import errors
 
-from ..app.server import registry
-from ..schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
+from schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
 from typing import Dict, Tuple, Any
+
+from server.rebar import registry
 
 
 @registry.handles(

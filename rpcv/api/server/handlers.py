@@ -1,20 +1,16 @@
 import os
-from pathlib import Path
 from typing import Any, Dict
 
 import awsgi
 from flask import Flask
+from pathlib import Path
 from flask_dotenv import DotEnv
-from flask_rebar import Rebar
+from server.rebar import rebar
+from common import log
+from controllers import hypervisor, cluster  # noqa: F401
 
-from ..common import log
 
 logger = log.get_logger(__file__)
-
-rebar = Rebar()
-
-
-registry = rebar.create_handler_registry(prefix="/api")
 
 
 def create_app() -> Flask:
@@ -39,7 +35,3 @@ def handler(event: Dict[str, Any], context: Dict[str, Any]) -> Any:
     app = create_app()
     base64_types = ["image/png"]
     return awsgi.response(app, event, context, base64_content_types=base64_types)
-
-
-if __name__ == "__main__":
-    run_app()

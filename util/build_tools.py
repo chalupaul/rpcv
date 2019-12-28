@@ -1,5 +1,4 @@
 import os
-import shutil
 import toml
 import subprocess
 from typing import Dict, List
@@ -57,17 +56,6 @@ def make_prod_requirements(target_file: str) -> None:
 
 def poetry_wrapper() -> None:
     make_prod_requirements(target_deps_file)
-
-
-def distribute_requirements() -> None:
-    projects_dir = os.path.join(app_dir, "rpcv")
-    projects = [
-        os.path.join(projects_dir, d)
-        for d in os.listdir(projects_dir)
-        if not d.startswith("_")
-    ]
-    for project in projects:
-        shutil.copyfile(target_deps_file, os.path.join(project, deps_file_name))
 
 
 def get_last_coverage_run() -> int:
