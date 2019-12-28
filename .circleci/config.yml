@@ -126,18 +126,6 @@ commands:
             REGION: us-west-2
           command: |
             poetry run doit -n 4 -f ./util/gate_tests.py
-  sam_build:
-    description: Build app for stage << parameters.stage >>
-    parameters:
-      stage:
-        type: string
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - deps-<< parameters.stage >>-{{ checksum "poetry.lock" }}
-      - attach_workspace:
-          at: ~/.aws
   sam_deploy:
     description: Deploy rpcv for stage << parameters.stage >>
     parameters:
@@ -179,11 +167,6 @@ jobs:
     steps:
       - build_prep:
           stage: dev
-  dev_build:
-    <<: *deploy_defaults
-    steps:
-      - sam_build:
-          stage: dev
   dev_deploy:
     <<: *deploy_defaults
     steps:
@@ -193,9 +176,6 @@ workflows:
   release:dev:
     jobs:
       - dev_build_prep
-      - dev_build:
-          requires:
-            - dev_build_prep
       - dev_gate_tests:
           requires:
             - dev_build_prep
@@ -206,4 +186,3 @@ workflows:
           requires:
             - dev_gate_tests
             - dev_unit_coverage_tests
-            - dev_build
