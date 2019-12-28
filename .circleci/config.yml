@@ -49,7 +49,7 @@ commands:
             - ~/.cache/pypoetry/virtualenvs
       - restore_cache:
           keys:
-            - deplayer-<< parameters.stage >>-{{ checksum "poetry.lock" }}
+            - deplayer-<< parameters.stage >>-
       - run:
           name: build dependency lambda layer
           command: |
@@ -141,7 +141,7 @@ commands:
       - run:
           name: Deploy app
           command: |
-            sam deploy --debug \
+            sam deploy \
             --stack-name rpcv-api-<< parameters.stage >> \
             --s3-prefix << parameters.stage >> \
             --s3-bucket vdo-rpcv-<< parameters.stage >> \
@@ -154,7 +154,7 @@ commands:
       - run:
           name: Discovery
           command: |
-            find ~
+            cat ~/.aws-sam/metadata.json
 jobs:
   dev_gate_tests:
     <<: *deploy_defaults
