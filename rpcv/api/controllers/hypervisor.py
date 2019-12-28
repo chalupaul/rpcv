@@ -1,11 +1,10 @@
+from typing import Any, Dict, Tuple
 from uuid import UUID
 
 import flask_rebar
 from flask_rebar import errors
 
-from schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
-from typing import Dict, Tuple, Any
-
+from schemas.hypervisor import CreateHypervisorSchema, HypervisorSchema
 from server.rebar import registry
 
 

@@ -1,12 +1,13 @@
 import copy
 import json
-import requests
 from typing import Any, Dict
 
-import rpcv.common.log
+import requests
+
+import common.log
 from authpolicy import AuthPolicy
 
-logger = rpcv.common.log.get_logger()
+logger = common.log.get_logger()
 
 
 def build_policy(method_arn: str, user_id: str, allow: bool = False) -> Any:

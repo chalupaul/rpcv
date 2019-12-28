@@ -1,12 +1,10 @@
+from typing import Any, Dict, Tuple
 from uuid import UUID
 
 import flask_rebar
 from flask_rebar import errors
 
-from schemas.cluster import ClusterSchema, CreateClusterSchema, ClusterStatus
-
-from typing import Dict, Tuple, Any
-
+from schemas.cluster import ClusterSchema, ClusterStatus, CreateClusterSchema
 from server.rebar import registry
 
 

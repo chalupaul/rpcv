@@ -1,14 +1,14 @@
 import os
+from pathlib import Path
 from typing import Any, Dict
 
 import awsgi
 from flask import Flask
-from pathlib import Path
 from flask_dotenv import DotEnv
-from server.rebar import rebar
-from common import log
-from controllers import hypervisor, cluster  # noqa: F401
 
+from common import log
+from controllers import cluster, hypervisor  # noqa: F401
+from server.rebar import rebar
 
 logger = log.get_logger(__file__)
 

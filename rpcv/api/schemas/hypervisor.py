@@ -1,8 +1,9 @@
-from enum import Enum
 import ipaddress
-from marshmallow import fields, Schema, ValidationError
-from marshmallow_enum import EnumField
+from enum import Enum
+
 from flask_rebar import RequestSchema
+from marshmallow import Schema, ValidationError, fields
+from marshmallow_enum import EnumField
 
 
 class ClusterStatus(Enum):
