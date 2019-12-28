@@ -39,7 +39,7 @@ exclude = '''
 '''
 
 [tool.poetry.scripts]
-rpcv = 'rpcv.api:run_app'
+rpcv = 'rpcv.api.app:run_app'
 ci-gen-deps = 'util.build_tools:poetry_wrapper'
 ci-distribute-deps = 'util.build_tools:distribute_requirements'
 ci-get-last-coverage = 'util.build_tools:poetry_wrapper_coverage'
