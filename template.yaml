@@ -25,15 +25,15 @@ Resources:
     Properties:
       StageName: !Ref Stage
       MinimumCompressionSize: 1024
-      Auth:
-        DefaultAuthorizer: RpcvAuthorizer
-        Authorizers:
-          RpcvAuthorizer:
-            FunctionArn: !GetAtt RpcvLambdaAuthorizer.Arn
-            FunctionPayloadType: REQUEST
-            Identity:
-              Headers:
-                - x-auth-token
+#      Auth:
+#        DefaultAuthorizer: RpcvAuthorizer
+#        Authorizers:
+#          RpcvAuthorizer:
+#            FunctionArn: !GetAtt RpcvLambdaAuthorizer.Arn
+#            FunctionPayloadType: REQUEST
+#            Identity:
+#              Headers:
+#                - x-auth-token
 
   RpcvDependencyLayer:
     Type: AWS::Serverless::LayerVersion
