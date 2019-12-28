@@ -141,7 +141,7 @@ commands:
       - run:
           name: Deploy app
           command: |
-            sam deploy \
+            sam deploy --debug \
             --stack-name rpcv-api-<< parameters.stage >> \
             --s3-prefix << parameters.stage >> \
             --s3-bucket vdo-rpcv-<< parameters.stage >> \
@@ -154,7 +154,7 @@ commands:
       - run:
           name: Discovery
           command: |
-            ls ~/.aws-sam/build
+            find ~
 jobs:
   dev_gate_tests:
     <<: *deploy_defaults
