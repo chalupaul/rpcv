@@ -138,13 +138,10 @@ commands:
       - restore_cache:
           keys:
             - deplayer-<< parameters.stage >>-
-      - restore_cache:
-          keys:
-            - sam-metadata-<< parameters.stage >>-
       - run:
           name: Deploy app
           command: |
-            sam deploy --debug \
+            sam deploy \
             --stack-name rpcv-api-<< parameters.stage >> \
             --s3-prefix << parameters.stage >> \
             --s3-bucket vdo-rpcv-<< parameters.stage >> \
@@ -154,10 +151,6 @@ commands:
             --parameter-overrides Stage=<< parameters.stage >> \
             --no-fail-on-empty-changeset \
             --template ./template.yaml
-      - save_cache:
-          key: sam-metadata-<< parameters.stage >>-{{ checksum "~/.aws-sam/metadata.json" }}
-          paths:
-            - ~/.aws-sam
 jobs:
   dev_gate_tests:
     <<: *deploy_defaults
