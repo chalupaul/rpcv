@@ -1,8 +1,12 @@
 import os
-from typing import List
+from typing import List, Dict, Any
 
 app_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 code_root = os.path.join(app_dir, "rpcv")
+
+
+def _build_action(actions: List[str] = [], verbosity: int = 2) -> Dict[str, Any]:
+    return {"verbosity": verbosity, "actions": actions}
 
 
 def _find_modules() -> List[str]:
@@ -20,8 +24,8 @@ template_file = os.path.join(app_dir, "template.yaml")
 
 def task_flake8():
     # line length of 88 to match black
-    return {
-        "actions": [
+    return _build_action(
+        [
             (
                 "poetry run flake8"
                 " --max-line-length=88"
@@ -30,46 +34,47 @@ def task_flake8():
                 f" {code_dirs} {test_dir}"
             )
         ]
-    }
+    )
 
 
 def task_mypy():
-    return {
-        "actions": [
+    return _build_action(
+        [
             (
                 "poetry run mypy"
                 " --strict "
                 " --ignore-missing-imports"
                 " --allow-subclassing-any"
+                " --allow-untyped-decorators"
                 f" {code_dirs}"
             )
         ]
-    }
+    )
 
 
 def task_black():
-    return {"actions": [f"poetry run black {code_dirs} {test_dir}"]}
+    return _build_action([f"poetry run black {code_dirs} {test_dir}"])
 
 
 def task_bandit():
-    return {"actions": [f"poetry run bandit -r {code_dirs}"]}
+    return _build_action([f"poetry run bandit -r {code_dirs}"])
 
 
 def task_pyproject_lint():
-    return {"actions": [f"poetry check"]}
+    return _build_action(["poetry check"])
 
 
 def task_cfn_lint():
     # Currently E3038 is disabled becaues sam auto-inflates the template.
-    return {"actions": [f"poetry run cfn-lint -i E3038 -t {template_file}"]}
+    return _build_action([f"poetry run cfn-lint -i E3038 -t {template_file}"])
 
 
 def task_sam_lint():
     stagename = os.environ.get("STAGE", "dev")
     region = os.environ.get("REGION", "us-west-2")
     template_file = os.path.join(app_dir, "template.yaml")
-    return {
-        "actions": [
+    return _build_action(
+        [
             (
                 "poetry run sam validate"
                 f" --profile vdo-rpcv-{stagename}"
@@ -77,4 +82,4 @@ def task_sam_lint():
                 f" --template {template_file}"
             )
         ]
-    }
+    )

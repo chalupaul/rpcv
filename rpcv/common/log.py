@@ -26,11 +26,13 @@ def get_logger(log_name: str = __name__) -> structlog._config.BoundLoggerLazyPro
     ]
 
     if stagename in ["dev", "prod"]:
-        processors.append(
-            # Decodes the unicode values in any kv pairs
-            structlog.processors.UnicodeDecoder(),
-            # Creates the necessary args, kwargs for log()
-            structlog.processors.JSONRenderer(indent=2, sort_keys=True),
+        processors.extend(
+            [
+                # Decodes the unicode values in any kv pairs
+                structlog.processors.UnicodeDecoder(),
+                # Creates the necessary args, kwargs for log()
+                structlog.processors.JSONRenderer(indent=2, sort_keys=True),
+            ]
         )
     else:
         processors.append(

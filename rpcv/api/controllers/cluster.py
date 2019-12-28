@@ -6,11 +6,13 @@ from flask_rebar import errors
 from api.app import registry
 from api.schemas.cluster import ClusterSchema, CreateClusterSchema, ClusterStatus
 
+from typing import Dict, Tuple, Any
+
 
 @registry.handles(
     rule="/clusters", method="POST", request_body_schema=CreateClusterSchema(),
 )
-def create_cluster():
+def create_cluster() -> Tuple[Dict[str, Any], int]:
     body = flask_rebar.get_validated_body()
     sample_data = {
         "uuid": body.uuid,
@@ -18,7 +20,7 @@ def create_cluster():
         "hypervisors": [],
     }
 
-    cluster = ClusterSchema().dumps(sample_data)
+    cluster: Dict[str, Any] = ClusterSchema().dumps(sample_data)
     return cluster, 201
 
 
@@ -27,14 +29,14 @@ def create_cluster():
     method="GET",
     query_string_schema=CreateClusterSchema(),
 )
-def get_cluster(cluster_uuid: UUID):
+def get_cluster(cluster_uuid: UUID) -> Dict[str, Any]:
     sample_data = {
         "uuid": cluster_uuid,
         "status": getattr(ClusterStatus, "CREATING"),
         "hypervisors": [],
     }
 
-    cluster = ClusterSchema().dumps(sample_data)
+    cluster: Dict[str, Any] = ClusterSchema().dumps(sample_data)
     if cluster is None:
         raise errors.NotFound()
 
@@ -46,7 +48,7 @@ def get_cluster(cluster_uuid: UUID):
     method="PATCH",
     request_body_schema=CreateClusterSchema(),
 )
-def update_cluster(cluster_uuid: UUID):
+def update_cluster(cluster_uuid: UUID) -> Tuple[str, int]:
     body = flask_rebar.get_validated_body()
 
     cluster = body
@@ -57,8 +59,8 @@ def update_cluster(cluster_uuid: UUID):
 
 
 @registry.handles(rule="/clusters/<uuid:cluster_uuid>", method="DELETE")
-def delete_cluster(cluster_uuid: UUID):
-    cluster = {}
+def delete_cluster(cluster_uuid: UUID) -> Tuple[str, int]:
+    cluster: Dict[str, Any] = {}
     if cluster is None:
         raise errors.NotFound()
 

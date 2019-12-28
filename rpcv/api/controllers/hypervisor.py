@@ -5,15 +5,16 @@ from flask_rebar import errors
 
 from api.app import registry
 from api.schemas.hypervisor import HypervisorSchema, CreateHypervisorSchema
+from typing import Dict, Tuple, Any
 
 
 @registry.handles(
     rule="/hypervisors", method="POST", request_body_schema=CreateHypervisorSchema(),
 )
-def create_hypervisor():
+def create_hypervisor() -> Tuple[Dict[str, Any], int]:
     body = flask_rebar.get_validated_body()
     account = body
-    return account, 201
+    return {"new": account}, 201
 
 
 @registry.handles(
@@ -21,7 +22,7 @@ def create_hypervisor():
     method="GET",
     query_string_schema=CreateHypervisorSchema(),
 )
-def get_hypervisor(hypervisor_uuid: UUID):
+def get_hypervisor(hypervisor_uuid: UUID) -> Any:
     hypervisor = HypervisorSchema()
     if hypervisor is None:
         raise errors.NotFound()
@@ -34,7 +35,7 @@ def get_hypervisor(hypervisor_uuid: UUID):
     method="PATCH",
     request_body_schema=CreateHypervisorSchema(),
 )
-def update_hypervisor(hypervisor_uuid: UUID):
+def update_hypervisor(hypervisor_uuid: UUID) -> Tuple[str, int]:
     body = flask_rebar.get_validated_body()
 
     hypervisor = body
@@ -45,8 +46,8 @@ def update_hypervisor(hypervisor_uuid: UUID):
 
 
 @registry.handles(rule="/hypervisors/<uuid:cluster_uuid>", method="DELETE")
-def delete_hypervisor(account_uuid: UUID):
-    hypervisor = {}
+def delete_hypervisor(hypervisor_uuid: UUID) -> Tuple[str, int]:
+    hypervisor: Dict[str, str] = {}
     if hypervisor is None:
         raise errors.NotFound()
 
