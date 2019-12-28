@@ -27,6 +27,7 @@ def create_app() -> Flask:
     dot_env.init_app(app, env_file=env_file, verbose_mode=True)
 
     rebar.init_app(app)
+    logger.debug("Routes configured", routes=app.url_map)
     return app
 
 
