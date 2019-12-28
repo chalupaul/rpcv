@@ -151,6 +151,10 @@ commands:
             --parameter-overrides Stage=<< parameters.stage >> \
             --no-fail-on-empty-changeset \
             --template ./template.yaml
+      - run:
+          name: Discovery
+          command: |
+            ls ~/.aws-sam/build
 jobs:
   dev_gate_tests:
     <<: *deploy_defaults
