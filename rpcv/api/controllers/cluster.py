@@ -3,7 +3,7 @@ from uuid import UUID
 import flask_rebar
 from flask_rebar import errors
 
-from ..app import registry
+from ..app.server import registry
 from ..schemas.cluster import ClusterSchema, CreateClusterSchema, ClusterStatus
 
 from typing import Dict, Tuple, Any
