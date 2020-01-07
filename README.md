@@ -19,7 +19,9 @@ Installing
 VSCODE Hints
 -----------
 
-I'm assuming you're using the [New Windows Terminal](https://github.com/microsoft/terminal). I don't have many plugins, just Python and IntelliCode.
+I'm assuming you're using the [New Windows Terminal](https://github.com/microsoft/terminal).
+
+I don't have many vscode plugins, just Python and IntelliCode.
 
 All services in the monorepo can be added to your pythonpath so vscode can find class definitions. Create a `.env` file in the project root with the following paths:
 
