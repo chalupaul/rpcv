@@ -21,7 +21,7 @@ VSCODE Hints
 
 I'm assuming you're using the [New Windows Terminal](https://github.com/microsoft/terminal).
 
-I don't have many vscode plugins, just Python and IntelliCode.
+I don't have many vscode plugins, just Python and IntelliCode. When you start up vscode, make sure you change your python interpreter to the poetry venv. Once you do it the first time, it's written to your settings file so you're good for subsequent runs.
 
 All services in the monorepo can be added to your pythonpath so vscode can find class definitions. Create a `.env` file in the project root with the following paths:
 
