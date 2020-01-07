@@ -21,7 +21,7 @@ VSCODE Info
 
 I'm assuming you're using the [New Windows Terminal](https://github.com/microsoft/terminal)
 
-All services in the monorepo can be added to your pythonpath so vscode can find class definitions. Create a `.env` directory in the project root with the following paths:
+All services in the monorepo can be added to your pythonpath so vscode can find class definitions. Create a `.env` file in the project root with the following paths:
 
 `PYTHONPATH="<PATH_TO_REPO>rpcv\api;<PATH_TO_REPO>\rpcv\api_authorizer"`
 
